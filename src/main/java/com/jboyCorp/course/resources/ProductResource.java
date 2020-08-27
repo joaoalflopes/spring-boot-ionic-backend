@@ -1,6 +1,7 @@
 package com.jboyCorp.course.resources;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jboyCorp.course.dto.ProductDTO;
 import com.jboyCorp.course.entities.Product;
 import com.jboyCorp.course.services.ProductService;
 
@@ -20,9 +22,10 @@ public class ProductResource {
 	private ProductService service;
 	
 	@GetMapping
-	public ResponseEntity<List<Product>> findAll(){
+	public ResponseEntity<List<ProductDTO>> findAll(){
 		List<Product> list = service.findAll();
-		return ResponseEntity.ok().body(list);
+		List<ProductDTO> listDto = list.stream().map(obj -> new ProductDTO(obj)).collect(Collectors.toList()); 
+		return ResponseEntity.ok().body(listDto);
 	}
 	
 	@GetMapping(value = "/{id}")
