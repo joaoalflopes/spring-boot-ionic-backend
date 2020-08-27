@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.jboyCorp.course.entities.Category;
 import com.jboyCorp.course.repositories.CategoryRepository;
+import com.jboyCorp.course.services.exceptions.DataBaseException;
 import com.jboyCorp.course.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -22,11 +25,7 @@ public class CategoryService {
 	
 	public Category findById(Long id){
 		Optional<Category> obj = repository.findById(id);
-		if(obj == null) {
-			throw new ResourceNotFoundException("Object Not Found! id: " + id
-					+ ", Type: " + Category.class.getName());	
-		}
-		return obj.get();
+		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 	
 	public Category insert(Category obj) {
@@ -34,8 +33,25 @@ public class CategoryService {
 		return repository.save(obj);
 	}
 	
-	public Category update(Category obj) {
-		findById(obj.getId());
-		return repository.save(obj);
+	public void delete(Long id) {
+		try {
+		repository.deleteById(id);
+		}
+		catch(EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException(id);
+		}
+		catch(DataIntegrityViolationException e) {
+			throw new DataBaseException(e.getMessage());
+		}
+	}
+	
+	public Category update(Long id, Category obj) {
+		Category entity = repository.getOne(id);
+		updateData(entity, obj);
+		return repository.save(entity);
+	}
+	
+	private void updateData(Category entity, Category obj) {
+		entity.setName(obj.getName());
 	}
 }
