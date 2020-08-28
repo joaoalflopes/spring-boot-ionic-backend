@@ -6,8 +6,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.jboyCorp.course.dto.UserDTO;
 import com.jboyCorp.course.entities.User;
 import com.jboyCorp.course.repositories.UserRepository;
 import com.jboyCorp.course.services.exceptions.DataBaseException;
@@ -21,6 +25,11 @@ public class UserService {
 	
 	public List<User> findAll(){
 		return repository.findAll();
+	}
+	
+	public Page<User> findPage(Integer page, Integer linesPerPage, String direction, String orderBy){
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		return repository.findAll(pageRequest);
 	}
 	
 	public User findById(Long id) {
@@ -53,5 +62,12 @@ public class UserService {
 	private void updateData(User entity, User obj) {
 		entity.setName(obj.getName());
 		entity.setEmail(obj.getEmail());
+		entity.setPassword(obj.getPassword());
 	}
+	
+	//Auxiliary Method
+		public User fromDTO(UserDTO objDTO) {
+			return new User(objDTO.getId(), objDTO.getName(), objDTO.getEmail(), null, null, objDTO.getPassword());
+		}
+	
 }
