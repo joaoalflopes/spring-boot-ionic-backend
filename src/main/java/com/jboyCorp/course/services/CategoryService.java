@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.jboyCorp.course.dto.CategoryDTO;
 import com.jboyCorp.course.entities.Category;
 import com.jboyCorp.course.repositories.CategoryRepository;
 import com.jboyCorp.course.services.exceptions.DataBaseException;
@@ -62,4 +63,10 @@ public class CategoryService {
 	private void updateData(Category entity, Category obj) {
 		entity.setName(obj.getName());
 	}
+	
+	//Auxiliary Method
+	public Category fromDTO(CategoryDTO objDTO) {
+		return new Category(objDTO.getId(), objDTO.getName());		
+	}
+	
 }
