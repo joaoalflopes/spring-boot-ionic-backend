@@ -2,21 +2,47 @@ package com.jboyCorp.course.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
+import com.jboyCorp.course.services.validation.UserInsert;
+
+@UserInsert
 public class UserNewDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	@NotEmpty(message="Field cannot be empty!")
+	@Length(min=5, max=100, message="Field accepts between 5 and 100 characters!")
 	private String name;
+	
+	@NotEmpty(message="Field cannot be empty!")
+	@Email(message="Invalid e-mail!")
 	private String email;
+	
+	@NotEmpty(message="Field cannot be empty!")
 	private String cpfOuCnpj;
 	private Integer typeClient;
+	
+	@NotEmpty(message="Field cannot be empty!")
 	private String password;
 	
+	@NotEmpty(message="Field cannot be empty!")
 	private String place;
+	
+	@NotEmpty(message="Field cannot be empty!")
 	private String numberPlace;
+	
 	private String addressComplement;
+	
+	@NotEmpty(message="Field cannot be empty!")
 	private String neightBorHood;
+	
+	@NotEmpty(message="Field cannot be empty!")
 	private String zipCode;
 	
+	@NotEmpty(message="Field cannot be empty!")
 	private String phone1;
 	private String phone2;
 	private String phone3;

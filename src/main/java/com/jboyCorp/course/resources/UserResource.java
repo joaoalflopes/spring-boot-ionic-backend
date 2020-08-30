@@ -46,7 +46,7 @@ public class UserResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<User> insert(@RequestBody UserNewDTO objDTO) {
+	public ResponseEntity<User> insert(@Valid @RequestBody UserNewDTO objDTO) {
 		User obj = service.fromDTO(objDTO);
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
