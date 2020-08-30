@@ -54,7 +54,7 @@ public class Order implements Serializable {
 		super();
 		this.id = id;
 		this.moment = moment;
-		setOrderStatus(orderStatus);
+		this.orderStatus = (orderStatus == null) ? null : orderStatus.getCode();
 		this.user = user;
 	}
 
@@ -110,6 +110,11 @@ public class Order implements Serializable {
 			sum += x.getSubTotal();
 		}
 		return sum;
+	}
+	
+	@Override
+	public String toString() {
+		return "Order [getTotal()=" + String.format("%,2f", getTotal()) + "]";
 	}
 
 	@Override

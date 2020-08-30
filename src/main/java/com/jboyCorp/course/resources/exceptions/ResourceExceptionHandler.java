@@ -29,7 +29,7 @@ public class ResourceExceptionHandler {
 	public ResponseEntity<StandardError> dataBase(DataBaseException e, HttpServletRequest request){
 		String error = "Database error.";
 		HttpStatus status = HttpStatus.BAD_REQUEST;
-		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+		StandardError err = new StandardError(Instant.now(), status.value(), error, "It is not possible to delete this user, there is linked orders.", request.getRequestURI());
 		return ResponseEntity.status(status).body(err);
 	}
 	

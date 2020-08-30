@@ -22,8 +22,9 @@ public class UserDTO implements Serializable {
 	@Email(message="Invalid e-mail!")
 	private String email;
 	
-	@NotEmpty(message="Field cannot be empty!")
-	private String password;
+		
+	
+	
 
 	public UserDTO() {
 	}
@@ -32,7 +33,6 @@ public class UserDTO implements Serializable {
 		id = obj.getId();
 		name = obj.getName();
 		email = obj.getEmail();
-		password = obj.getPassword();
 	}
 	
 
@@ -55,11 +55,5 @@ public class UserDTO implements Serializable {
 	}
 	public void setEmail(String email) {
 		this.email = email;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
 	}
 }

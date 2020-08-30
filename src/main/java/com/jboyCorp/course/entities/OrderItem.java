@@ -69,6 +69,11 @@ public class OrderItem implements Serializable {
 	}
 
 	@Override
+	public String toString() {
+		return "OrderItem [getSubTotal()=" + String.format("%,2f", getSubTotal() ) + "]";
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;

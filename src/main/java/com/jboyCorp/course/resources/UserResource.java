@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.jboyCorp.course.dto.UserDTO;
+import com.jboyCorp.course.dto.UserNewDTO;
 import com.jboyCorp.course.entities.User;
 import com.jboyCorp.course.services.UserService;
 
@@ -45,7 +46,8 @@ public class UserResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<User> insert(@RequestBody User obj) {
+	public ResponseEntity<User> insert(@RequestBody UserNewDTO objDTO) {
+		User obj = service.fromDTO(objDTO);
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(obj.getId()).toUri();

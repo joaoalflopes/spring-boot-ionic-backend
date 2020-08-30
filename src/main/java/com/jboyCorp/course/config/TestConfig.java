@@ -132,17 +132,19 @@ public class TestConfig implements CommandLineRunner {
 		addressRepository.saveAll(Arrays.asList(addrs1, addrs2, addrs3, addrs4));
 		
 		Order ord1 = new Order(null, Instant.parse("2019-06-20T19:53:07Z"), OrderStatus.PAID, u1);
-		Order ord2 = new Order(null, Instant.parse("2019-07-21T03:42:10Z"), OrderStatus.WAITING_PAYMENT, u2);
+		Order ord2 = new Order(null, Instant.parse("2019-07-21T03:42:10Z"), OrderStatus.SHIPPED, u2);
 		Order ord3 = new Order(null, Instant.parse("2019-07-22T15:21:22Z"), OrderStatus.DELIVERED, u1);
+		Order ord4 = new Order(null, Instant.parse("2019-08-10T16:06:45Z"), OrderStatus.PAID, u3);
 		
-		orderRepository.saveAll(Arrays.asList(ord1, ord2, ord3));
+		orderRepository.saveAll(Arrays.asList(ord1, ord2, ord3, ord4));
 		
 		OrderItem ordI1 = new OrderItem(ord1, p1, 2, p1.getPrice());
 		OrderItem ordI2 = new OrderItem(ord1, p3, 1, p3.getPrice());
 		OrderItem ordI3 = new OrderItem(ord2, p3, 2, p3.getPrice());
-		OrderItem ordI4 = new OrderItem(ord3, p5, 2, p5.getPrice()); 
+		OrderItem ordI4 = new OrderItem(ord3, p5, 2, p5.getPrice());
+		OrderItem ordI5 = new OrderItem(ord4, p6, 3, p6.getPrice());
 		
-		orderItemRepository.saveAll(Arrays.asList(ordI1, ordI2, ordI3, ordI4));
+		orderItemRepository.saveAll(Arrays.asList(ordI1, ordI2, ordI3, ordI4, ordI5));
 		
 		Payment pay1 = new Payment(null, Instant.parse("2019-06-20T22:53:07Z") , ord1);
 		ord1.setPayment(pay1);
@@ -150,7 +152,13 @@ public class TestConfig implements CommandLineRunner {
 		Payment pay2 = new Payment(null, Instant.parse("2019-07-22T16:21:22Z"), ord3);
 		ord3.setPayment(pay2);
 		
-		orderRepository.saveAll(Arrays.asList(ord1, ord3));
+		Payment pay3 = new Payment(null, Instant.parse("2019-07-23T18:25:49Z"), ord2);
+		ord2.setPayment(pay3);
+		
+		Payment pay4 = new Payment(null, Instant.parse("2019-08-11T08:33:15Z"), ord4);
+		ord4.setPayment(pay4);
+		
+		orderRepository.saveAll(Arrays.asList(ord1, ord3, ord2, ord4));
 		
 	}
 
