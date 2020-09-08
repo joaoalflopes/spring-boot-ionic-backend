@@ -72,10 +72,16 @@ public class TestConfig implements CommandLineRunner {
 		Product p3 = new Product(null, "Samsung Galaxy Buds+ Plus", "Samsung Galaxy Buds+ Plus, True Wireless Earbuds (Wireless Charging Case included)", 149.99, null);
 		Product p4 = new Product(null, "Car Vacuum", "HOTOR Corded Car Vacuum Cleaner High Power for Quick Car Cleaning, DC 12V", 25.99, null);
 		Product p5 = new Product(null, "ZippyPaws", "ZippyPaws - Skinny Peltz No Stuffing Squeaky Plush Dog Toy", 9.80, null);
-		Product p6 = new Product(null, "Kaspersky Internet Security 2020", "Kaspersky Internet Security 2020,3 Devices,1 Year,PC/Mac/Android", 36.99, null); 
+		Product p6 = new Product(null, "Kaspersky Internet Security 2020", "Kaspersky Internet Security 2020,3 Devices,1 Year,PC/Mac/Android", 36.99, null);
+		Product p7 = new Product(null, "Waterproof Jacket", "Columbia Girls' Switchback II Waterproof Jacket", 69.99, null);
+		Product p8 = new Product(null, "3-Pack Short-Sleeve", "Simple Joys by Carter's Toddler Girls' 3-Pack Short-Sleeve Graphic Tees", 20.41, null);
+		Product p9 = new Product(null, "Under Armour boys socks", "Under Armour Youth Essential Lite No Show Socks, 6-pair", 16.00, null);
+		Product p10 = new Product(null, "Toddler Boy Briefs", "Marvel Hero Toddler Boy Briefs in 7pk", 10.90, null);
+		Product p11 = new Product(null, "1-Pack Queen Size Pillow", "WonderSleep Dream Rite Shredded Hypoallergenic Memory Foam Pillow", 19.99, null);
+		Product p12 = new Product(null, "Marvel's Avengers for PlayStation 4", "Available on September 4th, 2020 for PlayStation 4, plus PlayStation 5 owners can upgrade to the PS5 version of the game", 59.99, null);
 
 		categoryRepository.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7, cat8, cat9, cat10));
-		productRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5, p6));
+		productRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12));
 		
 		p1.getCategories().add(cat1);
 		p2.getCategories().add(cat1);
@@ -85,8 +91,14 @@ public class TestConfig implements CommandLineRunner {
 		p4.getCategories().add(cat10);
 		p5.getCategories().add(cat7);
 		p6.getCategories().add(cat5);
+		p7.getCategories().add(cat2);
+		p8.getCategories().add(cat2);
+		p9.getCategories().add(cat3);
+		p10.getCategories().add(cat3);
+		p11.getCategories().add(cat9);
+		p12.getCategories().add(cat8);
 			
-		productRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5, p6));
+		productRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12));
 		
 		State st1 = new State(null, "Sao Paulo", "SP");
 		State st2 = new State(null, "Rio de Janeiro", "RJ");

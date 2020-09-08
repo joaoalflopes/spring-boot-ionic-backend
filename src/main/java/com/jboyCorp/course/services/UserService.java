@@ -72,17 +72,18 @@ public class UserService {
 	private void updateData(User entity, User obj) {
 		entity.setName(obj.getName());
 		entity.setEmail(obj.getEmail());
+						
 	}
 	
 
 	// Auxiliary Method 1
 	public User fromDTO(UserDTO objDTO) {
 		User user = new User(objDTO.getId(), objDTO.getName(), objDTO.getEmail(), null, null, null);
-				
 		return user;
 	}
+		
 
-	// Auxiliary Method 2
+	// Auxiliary Method 2 (Insert)
 	public User fromDTO(UserNewDTO objDTO) {
 		User user = new User(null, objDTO.getName(), objDTO.getEmail(), objDTO.getCpfOuCnpj(),TypeClient.valueOf(objDTO.getTypeClient()), objDTO.getPassword());
 		City city = new City(objDTO.getCityId(), null, null);
@@ -96,7 +97,5 @@ public class UserService {
 			user.getPhones().add(objDTO.getPhone3());
 		}
 		return user;
-		
 	}
-
 }
