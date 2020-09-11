@@ -3,11 +3,15 @@ package com.jboyCorp.course.resources;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +38,13 @@ public class ProductResource {
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Product> findById(@PathVariable Long id){
 		Product obj = service.findById(id);
+		return ResponseEntity.ok().body(obj);
+	}
+	
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<Product> update(@Valid @RequestBody ProductDTO objDTO, @PathVariable Long id){
+		Product obj = service.fromDTO(objDTO);
+		obj = service.update(id, obj);
 		return ResponseEntity.ok().body(obj);
 	}
 	

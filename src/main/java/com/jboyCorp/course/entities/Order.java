@@ -43,19 +43,20 @@ public class Order implements Serializable {
 	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
 	private Payment payment;
 	
-//	@ManyToOne
-//	@JoinColumn(name = "deliveryAddress_id")
-//	private Address deliveryAddress;
+	@ManyToOne
+	@JoinColumn(name = "deliveryAddress_id")
+	private Address deliveryAddress;
 
 	public Order() {
 	}
 
-	public Order(Long id, Instant moment, OrderStatus orderStatus, User user) {
+	public Order(Long id, Instant moment, OrderStatus orderStatus, User user, Address deliveryAddress) {
 		super();
 		this.id = id;
 		this.moment = moment;
 		this.orderStatus = (orderStatus == null) ? null : orderStatus.getCode();
 		this.user = user;
+		this.deliveryAddress = deliveryAddress;
 	}
 
 	public Long getId() {
@@ -98,6 +99,14 @@ public class Order implements Serializable {
 
 	public void setPayment(Payment payment) {
 		this.payment = payment;
+	}
+	
+	public Address getDeliveryAddress() {
+		return deliveryAddress;
+	}
+
+	public void setDeliveryAddress(Address deliveryAddress) {
+		this.deliveryAddress = deliveryAddress;
 	}
 
 	public Set<OrderItem> getItems() {

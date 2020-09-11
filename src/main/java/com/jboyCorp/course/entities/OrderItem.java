@@ -14,6 +14,7 @@ import com.jboyCorp.course.entities.pk.OrderItemPK;
 public class OrderItem implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	@JsonIgnore
 	@EmbeddedId
 	private OrderItemPK id = new OrderItemPK();
 	

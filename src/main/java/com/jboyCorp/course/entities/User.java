@@ -35,8 +35,9 @@ public class User implements Serializable {
 	
 	
 	@ElementCollection
-	@CollectionTable(name = "phone")	
+	@CollectionTable(name = "tb_phone")
 	private Set<String> phones = new HashSet<>();
+	
 	
 	@OneToMany(mappedBy = "user", cascade=CascadeType.ALL)
 	private List<Address> adresses = new ArrayList<>();
