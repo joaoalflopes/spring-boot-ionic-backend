@@ -32,6 +32,8 @@ public class OrderService {
 	private OrderItemRepository orderItemRepository;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private EmailService emailService;
 	
 	
 	public List<Order> findAll(){
@@ -63,7 +65,7 @@ public class OrderService {
 			oI.setOrder(obj);
 		}
 		orderItemRepository.saveAll(obj.getItems());
-		System.out.println(obj);
+		emailService.sendOrderConfirmationEmail(obj);
 		return obj;
 	}
 }
