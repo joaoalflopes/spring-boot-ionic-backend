@@ -1,6 +1,8 @@
 package com.jboyCorp.course.entities;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -71,7 +73,17 @@ public class OrderItem implements Serializable {
 
 	@Override
 	public String toString() {
-		return "OrderItem [getSubTotal()=" + String.format("%,2f", getSubTotal() ) + "]";
+		NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.US);
+		StringBuilder builder = new StringBuilder();
+		builder.append(getProduct().getName());
+		builder.append(", Qty: ");
+		builder.append(getQuantity());
+		builder.append(", Unit price: ");
+		builder.append(nf.format(getPrice()));
+		builder.append(", SubTotal: ");
+		builder.append(nf.format(getSubTotal()));
+		builder.append("\n");
+		return builder.toString();
 	}
 
 	@Override

@@ -1,8 +1,12 @@
 package com.jboyCorp.course.entities;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -121,9 +125,28 @@ public class Order implements Serializable {
 		return sum;
 	}
 	
+
+
 	@Override
 	public String toString() {
-		return "Order [getTotal()=" + String.format("%,2f", getTotal()) + "]";
+		NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.US);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").withZone(ZoneId.of("GMT"));
+		StringBuilder builder = new StringBuilder();
+		builder.append("Request Number: ");
+		builder.append(getId());
+		builder.append(", Instant: ");
+		builder.append(formatter.format(getMoment()));
+		builder.append(", Client: ");
+		builder.append(getUser().getName());
+		builder.append(", Order status: ");
+		builder.append(getOrderStatus().getDescription());
+		builder.append("\nDetails:\n");
+		for(OrderItem oI : getItems()) {
+			builder.append(oI.toString());
+		}
+		builder.append("GrandTotal: ");
+		builder.append(nf.format(getTotal()));
+		return builder.toString();
 	}
 
 	@Override
