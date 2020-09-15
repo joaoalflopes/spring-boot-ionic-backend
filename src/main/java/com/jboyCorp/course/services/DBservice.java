@@ -113,9 +113,9 @@ public class DBservice {
 		stateRepository.saveAll(Arrays.asList(st1, st2, st3));
 		cityRepository.saveAll(Arrays.asList(cit1, cit2, cit3, cit4, cit5, cit6, cit7, cit8));
 		
-		User u1 = new User(null, "Maria Brown", "maria@gmail.com","08769488835",TypeClient.PESSOAFISICA ,"123456");
-		User u2 = new User(null, "Alex Green", "alex@gmail.com","07012742845",TypeClient.PESSOAFISICA ,"123456");
-		User u3 = new User(null, "Simoes & Barreira SC Ltda", "simoesbarra@gmail.com", "05755751000131",TypeClient.PESSOAJURIDICA, "445698");
+		User u1 = new User(null, "Johnny Boy Gomes", "joaoalfredo_lopes@yahoo.com.br","73977112007",TypeClient.PESSOAFISICA ,"123456");
+		User u2 = new User(null, "mary Helen Lopez", "leninhalopes65@gmail.com","21801289085",TypeClient.PESSOAFISICA ,"123456");
+		User u3 = new User(null, "Simoes & Barreira SC Ltda", "simoesbarra@gmail.com", "86982298000106",TypeClient.PESSOAJURIDICA, "445698");
 		
 		u1.getPhones().addAll(Arrays.asList("13991138797", "1332281406"));
 		u2.getPhones().addAll(Arrays.asList("13991236336", "13981328480"));
