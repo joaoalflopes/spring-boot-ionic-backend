@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +20,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jboyCorp.course.entities.enums.TypeClient;
+import com.jboyCorp.course.entities.enums.UserProfile;
 
 @Entity
 @Table(name = "tb_user")
@@ -40,6 +43,10 @@ public class User implements Serializable {
 	@CollectionTable(name = "tb_phone")
 	private Set<String> phones = new HashSet<>();
 	
+	@ElementCollection (fetch = FetchType.EAGER)
+	@CollectionTable(name= "tb_userProfile")
+	private Set<Integer> profiles = new HashSet<>();
+	
 	
 	@OneToMany(mappedBy = "user", cascade=CascadeType.ALL)
 	private List<Address> adresses = new ArrayList<>();
@@ -49,6 +56,7 @@ public class User implements Serializable {
 	private List<Order> orders = new ArrayList<>();
 	
 	public User() {
+		addUserProfile(UserProfile.USER_ONE);
 	}
 
 	public User(Long id, String name, String email, String cpfOuCnpj, TypeClient typeClient ,String password) {
@@ -59,6 +67,7 @@ public class User implements Serializable {
 		this.cpfOuCnpj = cpfOuCnpj;
 		this.typeClient = (typeClient == null) ? null : typeClient.getCode();
 		this.password = password;
+		addUserProfile(UserProfile.USER_ONE);
 	}
 
 
@@ -117,6 +126,14 @@ public class User implements Serializable {
 
 	public void setPhones(Set<String> phones) {
 		this.phones = phones;
+	}
+	
+	public Set<UserProfile> getProfiles(){
+		return profiles.stream().map(x -> UserProfile.valueOf(x)).collect(Collectors.toSet());
+	}
+	
+	public void addUserProfile(UserProfile userProfile) {
+		profiles.add(userProfile.getCode());
 	}
 	
 	public List<Address> getAdresses() {

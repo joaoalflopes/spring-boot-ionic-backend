@@ -20,6 +20,7 @@ import com.jboyCorp.course.entities.State;
 import com.jboyCorp.course.entities.User;
 import com.jboyCorp.course.entities.enums.OrderStatus;
 import com.jboyCorp.course.entities.enums.TypeClient;
+import com.jboyCorp.course.entities.enums.UserProfile;
 import com.jboyCorp.course.repositories.AddressRepository;
 import com.jboyCorp.course.repositories.CategoryRepository;
 import com.jboyCorp.course.repositories.CityRepository;
@@ -123,6 +124,8 @@ public class DBservice {
 		u1.getPhones().addAll(Arrays.asList("13991138797", "1332281406"));
 		u2.getPhones().addAll(Arrays.asList("13991236336", "13981328480"));
 		u3.getPhones().addAll(Arrays.asList("1332586614", "1332583250"));
+		
+		u1.addUserProfile(UserProfile.ADMIN);
 	
 		Address addrs1 = new Address(null, "Rua Anadir Dias de Carvalho", "586", "Casa", "Joquei Clube", "11450-515",
 				u1, cit7);
