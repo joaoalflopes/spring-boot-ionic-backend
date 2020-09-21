@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.jboyCorp.course.entities.Address;
@@ -31,6 +32,8 @@ import com.jboyCorp.course.repositories.UserRepository;
 @Service
 public class DBservice {
 	
+	@Autowired
+	private BCryptPasswordEncoder pen;
 	@Autowired
 	private CategoryRepository categoryRepository;
 	@Autowired
@@ -113,9 +116,9 @@ public class DBservice {
 		stateRepository.saveAll(Arrays.asList(st1, st2, st3));
 		cityRepository.saveAll(Arrays.asList(cit1, cit2, cit3, cit4, cit5, cit6, cit7, cit8));
 		
-		User u1 = new User(null, "Johnny Boy Gomes", "joaoalfredo_lopes@yahoo.com.br","73977112007",TypeClient.PESSOAFISICA ,"123456");
-		User u2 = new User(null, "mary Helen Lopez", "leninhalopes65@gmail.com","21801289085",TypeClient.PESSOAFISICA ,"123456");
-		User u3 = new User(null, "Simoes & Barreira SC Ltda", "simoesbarra@gmail.com", "86982298000106",TypeClient.PESSOAJURIDICA, "445698");
+		User u1 = new User(null, "Johnny Boy Gomes", "joaoalfredo_lopes@yahoo.com.br","73977112007",TypeClient.PESSOAFISICA , pen.encode("123456"));
+		User u2 = new User(null, "mary Helen Lopez", "leninhalopes65@gmail.com","21801289085",TypeClient.PESSOAFISICA , pen.encode("123456"));
+		User u3 = new User(null, "Simoes & Barreira SC Ltda", "68ronins@gmail.com", "86982298000106",TypeClient.PESSOAJURIDICA, pen.encode("445698"));
 		
 		u1.getPhones().addAll(Arrays.asList("13991138797", "1332281406"));
 		u2.getPhones().addAll(Arrays.asList("13991236336", "13981328480"));

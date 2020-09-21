@@ -9,6 +9,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,10 +28,14 @@ import com.jboyCorp.course.services.exceptions.ResourceNotFoundException;
 public class UserService {
 
 	@Autowired
+	private BCryptPasswordEncoder pen;
+	
+	@Autowired
 	private UserRepository repository;
 	@Autowired
 	private AddressRepository addressRepository;
 
+	
 	public List<User> findAll() {
 		return repository.findAll();
 	}
@@ -85,7 +90,7 @@ public class UserService {
 
 	// Auxiliary Method 2 (Insert)
 	public User fromDTO(UserNewDTO objDTO) {
-		User user = new User(null, objDTO.getName(), objDTO.getEmail(), objDTO.getCpfOuCnpj(),TypeClient.valueOf(objDTO.getTypeClient()), objDTO.getPassword());
+		User user = new User(null, objDTO.getName(), objDTO.getEmail(), objDTO.getCpfOuCnpj(),TypeClient.valueOf(objDTO.getTypeClient()), pen.encode(objDTO.getPassword()));
 		City city = new City(objDTO.getCityId(), null, null);
 		Address addrs = new Address(null, objDTO.getPlace(), objDTO.getNumberPlace(), objDTO.getAddressComplement(), objDTO.getNeightBorHood(), objDTO.getZipCode(), user, city);
 		user.getAdresses().add(addrs);

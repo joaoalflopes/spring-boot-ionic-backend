@@ -31,6 +31,8 @@ public class User implements Serializable {
 	private String email;
 	private String cpfOuCnpj;
 	private Integer typeClient;
+	
+	@JsonIgnore
 	private String password;
 	
 	
