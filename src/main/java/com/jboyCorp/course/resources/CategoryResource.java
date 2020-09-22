@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,28 +45,6 @@ public class CategoryResource {
 		return ResponseEntity.ok().body(obj);
 	}
 	
-	@PostMapping
-	public ResponseEntity<Category> insert(@Valid @RequestBody CategoryDTO objDTO){
-		Category obj = service.fromDTO(objDTO);
-		obj = service.insert(obj);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(obj.getId()).toUri();
-		return ResponseEntity.created(uri).body(obj);
-	}
-	
-	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id){
-		service.delete(id);
-		return ResponseEntity.noContent().build();
-	}
-		
-	@PutMapping(value = "/{id}")
-	public ResponseEntity<Category> update(@Valid @RequestBody CategoryDTO objDTO, @PathVariable Long id){
-		Category obj = service.fromDTO(objDTO);
-		obj = service.update(id, obj);
-		return ResponseEntity.ok().body(obj);
-	}
-	
 	@GetMapping(value = "/page")
 	public ResponseEntity<Page<CategoryDTO>> findPage(
 			@RequestParam(value="page", defaultValue="0") Integer page, 
@@ -75,5 +54,30 @@ public class CategoryResource {
 		Page<Category> list = service.findPage(page, linesPerPage, direction, orderBy);
 		Page<CategoryDTO> listDto = list.map(obj -> new CategoryDTO(obj)); 
 		return ResponseEntity.ok().body(listDto);
+	}
+	
+	@PreAuthorize("hasAnyRole('ADMIN')")	
+	@PostMapping
+	public ResponseEntity<Category> insert(@Valid @RequestBody CategoryDTO objDTO){
+		Category obj = service.fromDTO(objDTO);
+		obj = service.insert(obj);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(obj.getId()).toUri();
+		return ResponseEntity.created(uri).body(obj);
+	}
+	
+	@PreAuthorize("hasAnyRole('ADMIN')")	
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Long id){
+		service.delete(id);
+		return ResponseEntity.noContent().build();
+	}
+		
+	@PreAuthorize("hasAnyRole('ADMIN')")	
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<Category> update(@Valid @RequestBody CategoryDTO objDTO, @PathVariable Long id){
+		Category obj = service.fromDTO(objDTO);
+		obj = service.update(id, obj);
+		return ResponseEntity.ok().body(obj);
 	}
 }

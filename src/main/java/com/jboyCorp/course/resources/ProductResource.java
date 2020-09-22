@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -41,13 +42,6 @@ public class ProductResource {
 		return ResponseEntity.ok().body(obj);
 	}
 	
-	@PutMapping(value = "/{id}")
-	public ResponseEntity<Product> update(@Valid @RequestBody ProductDTO objDTO, @PathVariable Long id){
-		Product obj = service.fromDTO(objDTO);
-		obj = service.update(id, obj);
-		return ResponseEntity.ok().body(obj);
-	}
-	
 	@GetMapping(value = "/page")
 	public ResponseEntity<Page<ProductDTO>> findPage(
 			@RequestParam(value="name", defaultValue="") String name,
@@ -61,5 +55,13 @@ public class ProductResource {
 		Page<Product> list = service.search(nameDecoded, ids, page, linesPerPage, direction, orderBy);
 		Page<ProductDTO> listDto = list.map(obj -> new ProductDTO(obj)); 
 		return ResponseEntity.ok().body(listDto);
+	}
+
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<Product> update(@Valid @RequestBody ProductDTO objDTO, @PathVariable Long id){
+		Product obj = service.fromDTO(objDTO);
+		obj = service.update(id, obj);
+		return ResponseEntity.ok().body(obj);
 	}
 }
