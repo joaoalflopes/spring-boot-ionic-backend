@@ -19,8 +19,11 @@ import com.jboyCorp.course.entities.Address;
 import com.jboyCorp.course.entities.City;
 import com.jboyCorp.course.entities.User;
 import com.jboyCorp.course.entities.enums.TypeClient;
+import com.jboyCorp.course.entities.enums.UserProfile;
 import com.jboyCorp.course.repositories.AddressRepository;
 import com.jboyCorp.course.repositories.UserRepository;
+import com.jboyCorp.course.security.UserSS;
+import com.jboyCorp.course.services.exceptions.AuthorizationException;
 import com.jboyCorp.course.services.exceptions.DataBaseException;
 import com.jboyCorp.course.services.exceptions.ResourceNotFoundException;
 
@@ -46,6 +49,11 @@ public class UserService {
 	}
 
 	public User findById(Long id) {
+		
+		UserSS user = UserAuthService.authenticated();
+		if(user==null || !user.hasRole(UserProfile.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Access denied");
+		}
 		Optional<User> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
