@@ -5,16 +5,22 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jboyCorp.course.entities.BankPayment;
 import com.jboyCorp.course.entities.Order;
 import com.jboyCorp.course.entities.OrderItem;
+import com.jboyCorp.course.entities.User;
 import com.jboyCorp.course.entities.enums.OrderStatus;
 import com.jboyCorp.course.repositories.OrderItemRepository;
 import com.jboyCorp.course.repositories.OrderRepository;
 import com.jboyCorp.course.repositories.PaymentRepository;
+import com.jboyCorp.course.security.UserSS;
+import com.jboyCorp.course.services.exceptions.AuthorizationException;
 import com.jboyCorp.course.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -44,6 +50,17 @@ public class OrderService {
 		Optional<Order> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
+	
+	public Page<Order> findPage(Integer page, Integer linesPerPage, String direction, String orderBy){
+		UserSS userSS = UserAuthService.authenticated();
+		if(userSS == null) {
+			throw new AuthorizationException("Access denied!");
+		}
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		User user = userService.findById(userSS.getId());
+		return repository.findByUser(user, pageRequest);
+	}
+		
 	
 	@Transactional
 	public Order insert(Order obj) {
