@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.jboyCorp.course.services.exceptions.AuthorizationException;
 import com.jboyCorp.course.services.exceptions.DataBaseException;
+import com.jboyCorp.course.services.exceptions.ObjectNotFoundException;
 import com.jboyCorp.course.services.exceptions.ResourceNotFoundException;
 
 @ControllerAdvice
@@ -49,6 +50,14 @@ public class ResourceExceptionHandler {
 	public ResponseEntity<StandardError> Authorization(AuthorizationException e, HttpServletRequest request){
 		String error = "Authorization denied.";
 		HttpStatus status = HttpStatus.FORBIDDEN;
+		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(status).body(err);
+	}
+	
+	@ExceptionHandler(ObjectNotFoundException.class)
+	public ResponseEntity<StandardError> ObjectException(ObjectNotFoundException e, HttpServletRequest request){
+		String error = "Request not forwarded.";
+		HttpStatus status = HttpStatus.NOT_FOUND;
 		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(status).body(err);
 	}

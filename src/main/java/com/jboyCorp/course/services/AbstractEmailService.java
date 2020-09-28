@@ -14,6 +14,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import com.jboyCorp.course.entities.Order;
+import com.jboyCorp.course.entities.User;
 
 public abstract class AbstractEmailService implements EmailService {
 	
@@ -74,6 +75,23 @@ public abstract class AbstractEmailService implements EmailService {
 		mmh.setSentDate(new Date(System.currentTimeMillis()));
 		mmh.setText(htmlFromTemplateOrder(obj), true);
 		return mimeMessage;
+	}
+	
+	@Override
+	public void sendNewPasswordEmail(User user, String newPass) {
+		SimpleMailMessage sm = prepareNewPasswordEmail(user, newPass);
+		sendEmail(sm);
+	}
+
+	protected SimpleMailMessage prepareNewPasswordEmail(User user, String newPass) {
+		
+		SimpleMailMessage sm = new SimpleMailMessage();
+		sm.setTo(user.getEmail());
+		sm.setFrom(sender);
+		sm.setSubject("New password request");
+		sm.setSentDate(new Date(System.currentTimeMillis()));
+		sm.setText("New Password: " + newPass);
+		return sm;
 	}
 
 }

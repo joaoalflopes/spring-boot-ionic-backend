@@ -1,6 +1,7 @@
 package com.jboyCorp.course.security;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -24,6 +25,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	private AuthenticationManager authenticationManager;
 
 	private JWTUtil jwtUtil;
+	
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
 		setAuthenticationFailureHandler(new JWTAuthenticationFailureHandler());
@@ -72,8 +75,11 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 		private String json() {
 			long date = new Date().getTime();
-			return "{\timestamp\": " + date + ", " + "\"status\": 401, " + "\"error\": \"Not authorized\", "
-					+ "\"message\": \"Invalid email or password\", " + "\"path\": \"/login\"}";
+			return "{\"timestamp\": " + sdf.format(date)+ ", "
+				 + "\"status\": 401, "
+				 + "\"error\": \"Not authorized\", "
+				 + "\"message\": \"Invalid email or password\", " 
+				 + "\"path\": \"/login\"}";
 
 		}
 
