@@ -11,8 +11,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.jboyCorp.course.services.exceptions.AuthorizationException;
 import com.jboyCorp.course.services.exceptions.DataBaseException;
+import com.jboyCorp.course.services.exceptions.FileException;
 import com.jboyCorp.course.services.exceptions.ObjectNotFoundException;
 import com.jboyCorp.course.services.exceptions.ResourceNotFoundException;
 
@@ -58,6 +61,30 @@ public class ResourceExceptionHandler {
 	public ResponseEntity<StandardError> ObjectException(ObjectNotFoundException e, HttpServletRequest request){
 		String error = "Request not forwarded.";
 		HttpStatus status = HttpStatus.NOT_FOUND;
+		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(status).body(err);
+	}
+	
+	@ExceptionHandler(FileException.class)
+	public ResponseEntity<StandardError> file(FileException e, HttpServletRequest request){
+		String error = "File upload process failed.";
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(status).body(err);
+	}
+	
+	@ExceptionHandler(AmazonS3Exception.class)
+	public ResponseEntity<StandardError> amazonService(AmazonS3Exception e, HttpServletRequest request){
+		String error = "AmazonService process failed.";
+		HttpStatus status = HttpStatus.valueOf(e.getErrorCode());
+		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(status).body(err);
+	}
+	
+	@ExceptionHandler(AmazonClientException.class)
+	public ResponseEntity<StandardError> amazonClient(AmazonClientException e, HttpServletRequest request){
+		String error = "AmazonClient process failed.";
+		HttpStatus status = HttpStatus.BAD_REQUEST;
 		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(status).body(err);
 	}
