@@ -29,6 +29,7 @@ import com.jboyCorp.course.repositories.UserRepository;
 import com.jboyCorp.course.security.UserSS;
 import com.jboyCorp.course.services.exceptions.AuthorizationException;
 import com.jboyCorp.course.services.exceptions.DataBaseException;
+import com.jboyCorp.course.services.exceptions.ObjectNotFoundException;
 import com.jboyCorp.course.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -48,10 +49,26 @@ public class UserService {
 	
 	@Value("${img.prefix.user.profile}")
 	private String prefix;
+	@Value("${img.profile.size}")
+	private Integer size;
 
 	
 	public List<User> findAll() {
 		return repository.findAll();
+	}
+	
+	public User findByEmail(String email) {
+		UserSS user = UserAuthService.authenticated();
+		if(user==null || !user.hasRole(UserProfile.ADMIN) && !email.equals(user.getUsername())) {
+			throw new AuthorizationException("Access denied");
+		}
+		
+		User obj = repository.findByEmail(email);
+			if (obj == null) {
+				throw new ObjectNotFoundException(
+						"Object Not Found! Id: " + user.getId() + ", Tipo: " + User.class.getName());
+			}
+		return obj;
 	}
 
 	public Page<User> findPage(Integer page, Integer linesPerPage, String direction, String orderBy) {
@@ -107,7 +124,11 @@ public class UserService {
 		}
 		
 		BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
+		jpgImage = imageService.cropSquare(jpgImage);
+		jpgImage = imageService.resize(jpgImage, size);
+		
 		String fileName = prefix + userSS.getId() + ".jpg";
+	
 		
 		return s3Service.uploadFile(imageService.getInputStream(jpgImage, "jpg"), fileName, "image");
 	}
