@@ -25,6 +25,7 @@ public class ResourceExceptionHandler {
 	
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<StandardError> resourceNotFound(ResourceNotFoundException e, HttpServletRequest request){
+		
 		String error = "Resource not found.";
 		HttpStatus status = HttpStatus.NOT_FOUND;
 		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
@@ -33,6 +34,7 @@ public class ResourceExceptionHandler {
 	
 	@ExceptionHandler(DataBaseException.class)
 	public ResponseEntity<StandardError> dataBase(DataBaseException e, HttpServletRequest request){
+		
 		String error = "Database error.";
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		StandardError err = new StandardError(Instant.now(), status.value(), error, "It is not possible to delete this user, there is linked orders.", request.getRequestURI());
@@ -41,9 +43,10 @@ public class ResourceExceptionHandler {
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<StandardError> validation(MethodArgumentNotValidException e, HttpServletRequest request){
+		
 		String error = "Validation error!";
-		HttpStatus status = HttpStatus.BAD_REQUEST;
-		ValidationError err = new ValidationError(Instant.now(), status.value(), error, "", request.getRequestURI());
+		HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
+		ValidationError err = new ValidationError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
 		for(FieldError x : e.getBindingResult().getFieldErrors()) {
 			err.addError(x.getField(), x.getDefaultMessage());
 		}
@@ -52,6 +55,7 @@ public class ResourceExceptionHandler {
 	
 	@ExceptionHandler(AuthorizationException.class)
 	public ResponseEntity<StandardError> Authorization(AuthorizationException e, HttpServletRequest request){
+		
 		String error = "Authorization denied.";
 		HttpStatus status = HttpStatus.FORBIDDEN;
 		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
@@ -60,6 +64,7 @@ public class ResourceExceptionHandler {
 	
 	@ExceptionHandler(ObjectNotFoundException.class)
 	public ResponseEntity<StandardError> ObjectException(ObjectNotFoundException e, HttpServletRequest request){
+		
 		String error = "Request not forwarded.";
 		HttpStatus status = HttpStatus.NOT_FOUND;
 		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
@@ -68,6 +73,7 @@ public class ResourceExceptionHandler {
 	
 	@ExceptionHandler(FileException.class)
 	public ResponseEntity<StandardError> file(FileException e, HttpServletRequest request){
+		
 		String error = "File upload process failed.";
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
@@ -76,6 +82,7 @@ public class ResourceExceptionHandler {
 	
 	@ExceptionHandler(AmazonServiceException.class)
 	public ResponseEntity<StandardError> amazonService(AmazonServiceException e, HttpServletRequest request){
+		
 		String error = "AmazonService process failed.";
 		HttpStatus status = HttpStatus.valueOf(e.getErrorCode());
 		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
@@ -84,6 +91,7 @@ public class ResourceExceptionHandler {
 	
 	@ExceptionHandler(AmazonS3Exception.class)
 	public ResponseEntity<StandardError> amazonS3(AmazonS3Exception e, HttpServletRequest request){
+		
 		String error = "AmazonService process failed.";
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
@@ -92,6 +100,7 @@ public class ResourceExceptionHandler {
 	
 	@ExceptionHandler(AmazonClientException.class)
 	public ResponseEntity<StandardError> amazonClient(AmazonClientException e, HttpServletRequest request){
+	
 		String error = "AmazonClient process failed.";
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
